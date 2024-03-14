@@ -1,0 +1,29 @@
+#Get all User
+
+GET  http://localhost:9494/api/v1/suppliers HTTP/1.1
+
+###
+
+#Post a new user
+POST http://localhost:8080/api/v1/suppliers HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Nikon Cameras",
+    "email": "nikon@cameras.com",
+    "phoneNumber": "234-345-6789",
+    "address": "Tokyo, Japan"
+
+}
+
+###
+DELETE   http://localhost:9494/api/v1/suppliers/1 HTTP/1.1
+
+
+###
+PATCH  http://localhost:9494/api/v1/suppliers/1 HTTP/1.1
+content-type: application/json
+
+{
+    "email": "hxtrong@gmail.com"
+}
