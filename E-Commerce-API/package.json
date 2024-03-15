@@ -25,6 +25,7 @@
     "jwt": "^0.2.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "mongodb": "^6.5.0",
     "mongoose": "^7.6.0",
     "mongoose-lean-virtuals": "^0.9.1",
     "sharp": "^0.33.2",

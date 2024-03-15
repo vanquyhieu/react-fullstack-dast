@@ -57,7 +57,7 @@ const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
             if (outline) {
                 buttonClassName = 'text-primary border-[1px] border-primary';
             } else {
-                buttonClassName = 'bg-primary text-white';
+                buttonClassName = 'bg-primary text-black';
             }
         } else {
             if (outline) {

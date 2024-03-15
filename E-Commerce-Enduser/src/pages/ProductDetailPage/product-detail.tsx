@@ -60,7 +60,6 @@ function ProductDetailPage() {
         enabled: Boolean(product),
     });
 
-    // const addToCartMutation = useMutation(purchaseService.addToCart);
 
     const imageRef = useRef<HTMLImageElement>(null);
 
@@ -106,9 +105,6 @@ function ProductDetailPage() {
         const top = offsetY * (1 - naturalHeight / rect.height);
         const left = offsetX * (1 - naturalWidth / rect.width);
 
-        // c2: lấy offsetX, offsetY không cần xử lý bubble event
-        // const offsetX = e.pageX - (rect.x + window.scrollX);
-        // const offsetY = e.pageY - (rect.y + window.scrollY);
 
         image.style.width = `${width}px`;
         image.style.height = `${height}px`;
@@ -126,42 +122,7 @@ function ProductDetailPage() {
         setBuyCount(count);
     };
 
-    // const handleAddToCart = () => {
-    //     if (isAuthenticated) {
-    //         addToCartMutation.mutate(
-    //             {
-    //                 id: product?.id.toString(),
-    //                 buy_count: buyCount,
-    //             },
-    //             {
-    //                 onSuccess: (data) => {
-    //                     toast.success(data.data.message, {
-    //                         toastId: data.data.message,
-    //                     });
-    //                     queryClient.invalidateQueries({
-    //                         queryKey: ['purchase']
-    //                     });
-    //                 },
-    //             },
-    //         );
-    //     } else {
-    //         toast.error('Bạn cần đăng nhập để thực hiện thao tác này', {
-    //             toastId: 'Bạn cần đăng nhập để thực hiện thao tác này',
-    //         });
-    //     }
-    // };
 
-    // const handleBuyNow = async (e: any) => {
-    //     e.preventDefault();
-    //     const response = await purchaseService.buyProducts({
-    //         id: product?.id ,
-    //         buy_count: buyCount,
-    //     });
-    //     navigate(
-    //         { pathname: '/cart' },
-    //         { state: { purchaseId: response.data.message } },
-    //     );
-    // };
 
     if (!product) {
         return <div>Loading...</div>;
@@ -303,12 +264,14 @@ function ProductDetailPage() {
                                 >
                                     Thêm vào giỏ hàng
                                 </Button>
-                                <Button primary onClick={()=>{
+                                <Button
+                                primary onClick={()=>{
                                     placeOrder({
                                         id: product._id,
                                         buy_count: buyCount,
                                     })
-                                }}>
+                                }}
+                                >
                                     Mua ngay
                                 </Button>
                             </div>

@@ -70,11 +70,11 @@ function LoginPage() {
         <div className="grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10">
           <div className="lg:col-span-2 lg:col-start-4">
             <form className="space-y-6 rounded bg-white p-10 shadow-sm" noValidate onSubmit={handleSubmit(handleLogin)}>
-              <div className="text-2xl">Đăng nhập</div>
+              <div className="text-2xl ">Đăng nhập</div>
               <InputField name="email" control={control} type="email" placeholder="Email" />
               <InputField name="password" control={control} type="password" placeholder="Password" autoComplete="on" />
               <div className="mt-3">
-                <Button primary type="submit" className="flex w-full items-center justify-center py-4" isLoading={loginMutation.isLoading}>
+                <Button primary type="submit" className="flex w-full items-center justify-center py-4 bg-orange-500" isLoading={loginMutation.isLoading}>
                   Đăng nhập
                 </Button>
               </div>
