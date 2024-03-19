@@ -378,8 +378,11 @@ const ProductPage = () => {
             onClick={() => {
               console.log("Edit this item");
               setIsModalEditOpen(true); //show modal edit lên
-              updateForm.setFieldsValue(record);
-            }}
+              updateForm.setFieldsValue({...record,
+                 supplierId: record.supplier._id,
+                  categoryId: record.category._id
+                });            
+              }}
           />
           <Popconfirm
             title="Are you sure to delete?"
@@ -631,9 +634,9 @@ const ProductPage = () => {
                 <Input />
               </Form.Item>
 
-              <Form.Item<DataType>
+              <Form.Item
                 label="Tên danh mục"
-                name="category"
+                name="categoryId"
                 rules={[
                   { required: true, message: "Please input stock Name!" },
                 ]}
@@ -641,7 +644,7 @@ const ProductPage = () => {
                 <Select>
                   {queryCategories?.data?.data.data.categories.map(
                     (item: categoryType) => (
-                      <Select.Option key={item._id} value={item._id}>
+                      <Select.Option key={item._id} value={item._id} name={item.name}>
                         {item.name}
                       </Select.Option>
                     )
@@ -649,9 +652,9 @@ const ProductPage = () => {
                 </Select>
               </Form.Item>
 
-              <Form.Item<DataType>
+              <Form.Item
                 label="Tên nhà cung cấp "
-                name="supplier"
+                name="supplierId"
                 rules={[
                   { required: true, message: "Please input stock Name!" },
                 ]}
