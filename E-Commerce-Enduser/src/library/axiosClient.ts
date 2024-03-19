@@ -26,8 +26,9 @@ axiosClient.interceptors.request.use(
 
 axiosClient.interceptors.response.use(
   async (response) => {
-    const { access_token, refreshToken } = response.data;
-    // LOGIN
+    const access_token = response.data.data?.access_token;
+    const refreshToken = response.data.data?.refreshToken;
+        // LOGIN
     if (access_token) {
       localStorage.setItem('access_token', access_token);
     }

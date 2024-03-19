@@ -7,8 +7,9 @@ const router = express.Router();
 router.get('/', categoriesController.getAll);
 
 // Lấy thông tin một danh mục theo ID
-router.get('/:id', categoriesController.getItemById);
-
+router.get('/category:id', categoriesController.getItemById);
+// Lấy thông tin một danh mục theo ID
+// router.get('/page:page&limit:limit&category:id', categoriesController.getItemById);
 // Tạo mới một danh mục
 // Middleware: Kiểm tra token và quyền hạn (ví dụ: chỉ Admin mới có quyền)
 router.post('/', categoriesController.createItem);

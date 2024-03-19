@@ -30,6 +30,16 @@ const getItemById = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getItemByIdPerPage = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const payload = req.params.id;
+    const product = await categoriesService.getItemByIdPerPage(payload);
+    sendJsonSuccess(res)(product);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createItem = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const payload = req.body;
@@ -65,6 +75,7 @@ const deleteItem = async (req: Request, res: Response, next: NextFunction) => {
 export default {
   getAll,
   getItemById,
+  getItemByIdPerPage,
   updateItem,
   createItem,
   deleteItem,

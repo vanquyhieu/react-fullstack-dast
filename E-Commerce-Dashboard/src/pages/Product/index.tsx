@@ -114,7 +114,7 @@ const ProductPage = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["products"],
     queryFn: async () =>
-      await axiosClient.get(`http://localhost:3000/api/v1/products`),
+      await axiosClient.get(`http://localhost:3000/api/v1/products/product-list`),
   });
   // console.log("queryProducts", data);
 
@@ -659,7 +659,7 @@ const ProductPage = () => {
                 <Select>
                   {querySuppliers?.data?.data.data.supplier.map(
                     (item: supplierType) => (
-                      <Select.Option key={item._id} value={item._id}>
+                      <Select.Option key={item._id} value={item._id} name={item.name}>
                         {item.name}
                       </Select.Option>
                     )

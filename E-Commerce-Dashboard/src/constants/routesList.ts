@@ -3,7 +3,7 @@ import Products from '../pages/Product';
 import Category from '../pages/Category';
 import Customers from '../pages/Customers';
 import Login from '../pages/Login';
-import EmptyLayout from '../components/Layouts/DefaultLayout';
+import EmptyLayout from '../components/Layouts/EmptyLayout';
 import Employees from '../pages/Employees';
 import Suppliers from '../pages/Supplier';
 import Order from '../pages/Order';
@@ -26,7 +26,7 @@ const publicRoutes: Routes[] = [
     {id: 5, path: '/login', element: Login, layout: EmptyLayout},
 ]
 
-//Private routes
+//Private routes    
 const privateRoutes: Routes[] = [
     {id: 1, path: '/', element: Dashboard},
     {id: 2, path: '/products', element: Products},

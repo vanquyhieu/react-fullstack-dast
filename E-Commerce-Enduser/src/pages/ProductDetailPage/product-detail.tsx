@@ -168,7 +168,7 @@ function ProductDetailPage() {
                                             tabIndex={0}
                                         >
                                             <img
-                                                src={img._id}
+                                                src={img.url}
                                                 alt={product.name}
                                                 className="absolute top-0 left-0 h-full w-full cursor-pointer bg-white object-cover"
                                             />
@@ -215,13 +215,13 @@ function ProductDetailPage() {
                             </div>
                             <div className="mt-8 flex items-center bg-gray-50 px-5 py-4">
                                 <div className="text-gray-500 line-through">
-                                    ₫
-                                    {formatCurrency(
+                                    {formatCurrency(    
                                         product.price_before_discount,
                                     )}
+                                    &nbsp;VND
                                 </div>
                                 <div className="ml-3 text-3xl font-medium text-primary">
-                                    ₫{formatCurrency(product.price)}
+                                    {formatCurrency(product.price)}&nbsp;VND
                                 </div>
                                 <div className="ml-4 rounded-sm bg-primary px-1 py-[2px] text-xs font-semibold uppercase text-white">
                                     {rateSale(

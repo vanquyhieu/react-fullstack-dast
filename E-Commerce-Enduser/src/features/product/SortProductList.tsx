@@ -57,12 +57,12 @@ const SortProductList = ({ queryConfig, pageSize, page }: PaginationProps) => {
         <div className="bg-gray-300/40 py-4 px-3">
             <div className="flex flex-wrap items-center justify-between gap-2 ">
                 <div className="flex flex-wrap items-center gap-2">
-                    <div>Sắp xếp theo</div>
+                    <div className=' text-lg'>Sắp xếp theo</div>
                     <button
                         className={classNames(
-                            'h-8 px-4 text-center text-sm capitalize ',
+                            'h-8 px-4 text-center text-base capitalize ',
                             {
-                                'bg-primary text-orange-600 hover:bg-primary/80':
+                                'bg-primary text-red-600 hover:bg-primary/80':
                                     isActiveSortBy(productSortBy.view),
                             },
                             {
@@ -76,9 +76,9 @@ const SortProductList = ({ queryConfig, pageSize, page }: PaginationProps) => {
                     </button>
                     <button
                         className={classNames(
-                            'h-8 px-4 text-center text-sm capitalize ',
+                            'h-8 px-4 text-center text-base capitalize ',
                             {
-                                'bg-primary text-orange-600 hover:bg-primary/80':
+                                'bg-primary text-red-600 hover:bg-primary/80':
                                     isActiveSortBy(productSortBy.createAt),
                             },
                             {
@@ -92,9 +92,9 @@ const SortProductList = ({ queryConfig, pageSize, page }: PaginationProps) => {
                     </button>
                     <button
                         className={classNames(
-                            'h-8 px-4 text-center text-sm capitalize ',
+                            'h-8 px-4 text-center text-base capitalize ',
                             {
-                                'bg-primary text-orange-600 hover:bg-primary/80':
+                                'bg-primary text-red-600 hover:bg-primary/80':
                                     isActiveSortBy(productSortBy.sold),
                             },
                             {
@@ -108,9 +108,9 @@ const SortProductList = ({ queryConfig, pageSize, page }: PaginationProps) => {
                     </button>
                     <select
                         className={classNames(
-                            'h-8 px-4 text-left text-sm capitalize text-black outline-none ',
+                            'h-8 px-4 text-left text-base capitalize text-black outline-none ',
                             {
-                                'bg-primary text-orange-600 hover:bg-primary/80':
+                                'bg-primary text-red-600 hover:bg-primary/80':
                                     isActiveSortBy(productSortBy.price),
                             },
                             {
@@ -152,13 +152,13 @@ const SortProductList = ({ queryConfig, pageSize, page }: PaginationProps) => {
 
                 <div className="flex items-center gap-2">
                     <div>
-                        <span className="text-primary">{page}</span>
+                        <span className="text-red-600">{page}</span>
                         <span>/{pageSize}</span>
                     </div>
-                    <div className="flex ml-2">
+                    <div className="flex ml-2 items-center">
                         {page === 1 ? (
                             <span className=" h-8 cursor-not-allowed rounded-tl-sm rounded-bl-sm bg-white/60 px-3 shadow hover:bg-slate-100">
-                                <FaChevronLeft className="text-gray-300" />
+                                <FaChevronLeft className="text-gray-300 " />
                             </span>
                         ) : (
                             <Link

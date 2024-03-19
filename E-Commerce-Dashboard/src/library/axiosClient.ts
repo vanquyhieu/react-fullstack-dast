@@ -33,8 +33,9 @@ axiosClient.interceptors.response.use(
      * bạn điều chỉnh lại cho đúng với cách code của bạn
      */
     // console.log('<<=== 🚀 axiosClient response.data  ===>>',response);
-    const { access_token, refreshToken } = response.data;
-    // khi LOGIN oK ==> LƯU token và freshTOken xuống localStorage
+    const access_token = response.data.data?.access_token;
+    const refreshToken = response.data.data?.refreshToken;
+        // khi LOGIN oK ==> LƯU token và freshTOken xuống localStorage
     if (access_token) {
       window.localStorage.setItem('access_token', access_token);
     }
@@ -75,7 +76,7 @@ axiosClient.interceptors.response.use(
         
         const refreshToken = window.localStorage.getItem('refreshToken');
         if (refreshToken) {
-          const response = await axiosClient.post('http://localhost:3000/api/v1/auth/refresh-token-admin', {
+          const response = await axiosClient.post('/refresh-token-admin', {
             refreshToken: refreshToken,
           });
 

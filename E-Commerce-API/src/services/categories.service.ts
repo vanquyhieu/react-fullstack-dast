@@ -34,6 +34,15 @@ const getItemById = async (id: string) => {
   }
 };
 
+const getItemByIdPerPage = async (payload:any) => {
+  try {
+    const category = await Category.findById(payload);
+    return category;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const createItem = async (payload: ICategory) => {
   try {
     const addCategory = await Category.create(payload);
@@ -66,6 +75,7 @@ const deleteItem = async (id: string) => {
 export default {
   getAllItems,
   getItemById,
+  getItemByIdPerPage,
   updateItem,
   createItem,
   deleteItem,

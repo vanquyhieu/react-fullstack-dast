@@ -9,11 +9,12 @@ import productsController from '../../controllers/products.controller';
 const router = express.Router();
 
 //Get All products from DB
-router.get('/', productsController.getAll);
+router.get('/product-list/', productsController.getAll);
 
 //get user by ID
 //Gắn middleware vào để check id có phải là số không
-router.get('/:id', productsController.getItemById);
+router.get('/:id?', productsController.getItemById);
+router.get('/product-list/:category?', productsController.getItemByParams);
 
 //Create a new user
 router.post('/', productsController.createItem);
@@ -23,7 +24,6 @@ router.post('/', productsController.createItem);
  * PATH /api/v1//:id
  */
 router.patch('/:id', productsController.updateItem);
-router.get('/slug/:slug', productsController.getItemBySlug);
 /**
  * Delete a user by ID
  * DELETE /api/v1//:id

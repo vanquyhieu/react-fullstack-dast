@@ -1,6 +1,22 @@
 import Product from '../models/products.model';
 import { IProduct } from '../types/model';
 
+interface ProductListConfig {
+  page?: number | string;
+  totalRecords?: number;
+  totalPages?:number;
+  currentPage?:number;
+  recordsPerPage?:number;
+  limit?: number | string;
+  sort_by?: 'createAt' | 'view' | 'sold' | 'price';
+  order?: 'asc' | 'desc';
+  exclude?: string;
+  rating_filter?: number | string;
+  price_max?: number | string;
+  price_min?: number | string;
+  name?: string;
+  category?: string;
+}
 const getAllItems = async (currentPage: number, pageSize: number) => {
 
   /**
@@ -29,8 +45,6 @@ const getAllItems = async (currentPage: number, pageSize: number) => {
     products,
     pagination
   };
-
-  return products;
 };
 
 const getItemById = async (id: string) => {
@@ -45,10 +59,30 @@ const getItemById = async (id: string) => {
 
   return product;
 };
-
-const getItemBySlug = async (slug: string) => {
+const getItemByParams = async (currentPage: number, pageSize: number,category: string) => {
+  // SELECT * FROM products WHERE id = id
   //Lấy tất cả ngoại trừ __v
-  const product = await Product.findOne({slug: slug}, '-__v').
+  const products = await Product.find({category}, '-__v')
+  /// get total documents in the Categories collection 
+  const totalRecords = await Product.countDocuments();
+  const pagination = {
+    totalRecords, 
+    totalPages: Math.ceil(totalRecords / pageSize),
+    currentPage: currentPage,
+    page_size: pageSize
+}
+
+  //return response, total pages, and current page
+  return {
+    products,
+    pagination
+  };
+
+};
+
+const getItemBySlug = async (category: string) => {
+  //Lấy tất cả ngoại trừ __v
+  const product = await Product.findOne({category: category}, '-__v').
   populate('category', '-__v').
   populate('supplier','-__v').
   lean({ virtuals: true });
@@ -78,6 +112,7 @@ const deleteItem = async (id: string) => {
 export default {
   getAllItems,
   getItemById,
+  getItemByParams,
   updateItem,
   createItem,
   deleteItem,

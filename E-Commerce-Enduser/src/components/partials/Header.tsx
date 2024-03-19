@@ -14,17 +14,7 @@ import { formatCurrency } from '../../utils';
 import { path } from '../../constants';
 import { useCartStore } from '../../hooks/useCartStore';
 
-// import { Logo } from 'src/components/icons';
-// import { Button, Popover } from 'src/components/shared';
-// import { useSearchProducts } from 'src/hooks';
-// import NavHeader from './NavHeader';
-// import { path } from 'src/constants';
-// import { useQuery } from 'react-query';
-// import { purchasesStatus } from 'src/constants/purchase';
-// import { purchaseService } from 'src/services';
-// import { formatCurrency } from 'src/utils';
-// import noproduct from 'src/assets/images/no-product.png';
-// import { useAppContext } from 'src/contexts/app.context';
+
 
 const MAX_PURCHASES = 5;
 

@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 const EmptyLayout = () => {
   return (
     <Fragment>
-    <Outlet />
+      <Outlet />
     </Fragment>
   )
 }

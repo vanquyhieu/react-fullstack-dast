@@ -79,7 +79,7 @@ function RegisterPage() {
     };
 
     return (
-        <div className="bg-primary">
+        <div className="bg-[linear-gradient(-180deg,#f53d2d,#f63)]">
             <div className="container">
                 <div className="grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10">
                     <div className="lg:col-span-2 lg:col-start-4">
@@ -113,7 +113,7 @@ function RegisterPage() {
                                 <Button
                                     primary
                                     type="submit"
-                                    className="flex w-full items-center justify-center py-4"
+                                    className="flex w-full items-center justify-center py-4 bg-[linear-gradient(-180deg,#f53d2d,#f63)]"
                                     isLoading={registerMutation.isLoading}
                                 >
                                     Đăng ký

@@ -17,8 +17,6 @@ const HomePage = () => {
     queryFn: () => {
       return productService.getProducts(queryConfig as ProductListConfig);
     },
-    keepPreviousData: true,
-    staleTime: 3 * 60 * 1000, // 3 minutes
   });
   const { data: categoriesData } = useQuery({
     queryKey: ['categories', queryConfig],

@@ -9,7 +9,6 @@ import {
   Input,
   message,
   Pagination,
-  Select,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,7 +17,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import config from "../../constants/config";
 import type { PaginationProps } from "antd";
 
-const purchasesStringStatus = {
+const purchasesStatus = {
   inCart: -1,
   all: 0,
   waitForConfirmation: 1,
@@ -49,7 +48,7 @@ interface IOrder {
     _id: string;
     firstName: string;
     lastName: string;
-    address: string;
+    address:string;
   };
   status?: purchasesStatus;
 }
@@ -57,6 +56,7 @@ interface IOrder {
 const Order = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
 
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -139,18 +139,43 @@ const Order = () => {
     console.log("Failed:", errorInfo);
   };
 
-  function getFormItemOptions() {
-    const options = [];
-    for (const [key, value] of Object.entries(purchasesStringStatus)) {
+  const fetchCreate = async (formData: IOrder) => {
+    return axiosClient.post(config.urlAPI + "/v1/purchases", formData);
+  };
 
-      options.push({
-        value, // Use value directly as it's already retrieved from the object
-        label: key.replace(/([A-Z])/g, " $1").toUpperCase(), // Use key for label
+  const mutationCreate = useMutation({
+    mutationFn: fetchCreate,
+    onSuccess: () => {
+      console.log("Create success !");
+      messageApi.open({
+        type: "success",
+        content: "Create success !",
       });
-    }
-    return options;
-  }
-  
+      queryClient.invalidateQueries({ queryKey: ["purchases"] });
+      setIsModalCreateOpen(false);
+      createForm.resetFields();
+    },
+    onError: () => {
+      // Handle error when API call fails
+    },
+  });
+
+  const [createForm] = Form.useForm();
+  const handleCreateOk = () => {
+    createForm.submit();
+  };
+
+  const handleCreateCancel = () => {
+    setIsModalCreateOpen(false);
+  };
+
+  const onFinishCreate = async (values: any) => {
+    mutationCreate.mutate(values);
+  };
+
+  const onFinishCreateFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
 
   const columns: ColumnsType<IOrder> = [
     {
@@ -170,19 +195,19 @@ const Order = () => {
       render: (text) => {
         // Here's where the magic happens
         switch (text) {
-          case purchasesStringStatus.inCart:
+          case purchasesStatus.inCart:
             return "In Cart";
-          case purchasesStringStatus.all:
-            return "All";
-          case purchasesStringStatus.waitForConfirmation:
+            case purchasesStatus.all:
+              return "All";
+          case purchasesStatus.waitForConfirmation:
             return "Waiting for Confirmation";
-          case purchasesStringStatus.waitForGetting:
+          case purchasesStatus.waitForGetting:
             return "WaitForGetting";
-          case purchasesStringStatus.inProgress:
+          case purchasesStatus.inProgress:
             return "InProgress";
-          case purchasesStringStatus.delivered:
+          case purchasesStatus.delivered:
             return "Delivered";
-          case purchasesStringStatus.cancelled:
+          case purchasesStatus.cancelled:
             return "Cancelled";
           // ... add cases for other statuses
           default:
@@ -195,7 +220,7 @@ const Order = () => {
       dataIndex: "user",
       key: "user",
       render: (_text, record) => {
-        return record.user.firstName + record.user.lastName;
+        return record.user.firstName+record.user.lastName;
       },
     },
     {
@@ -235,6 +260,14 @@ const Order = () => {
   return (
     <>
       {contextHolder}
+      <Button
+        type="primary"
+        onClick={() => {
+          setIsModalCreateOpen(true);
+        }}
+      >
+        Create a new Order
+      </Button>
 
       <Table
         pagination={false}
@@ -252,7 +285,6 @@ const Order = () => {
         />
       </div>
 
-      {/* Modal for Edit a new order */}
       <Modal
         title="Edit Order"
         open={isModalEditOpen}
@@ -269,17 +301,72 @@ const Order = () => {
           onFinishFailed={onFinishEditFailed}
           autoComplete="off"
         >
+          {/* Form fields for editing purchases */}
+          {/* <Form.Item<IOrder>
+            label="Created Date"
+            name="createdDate"
+            rules={[{ required: true, message: "" }]}
+
+            // Add validation rules here
+          >
+            <Input />
+          </Form.Item> */}
+
+          {/* <Form.Item<IOrder>
+            label="Shipped Date"
+            name="shippedDate"
+            rules={[{ required: true, message: "" }]}
+
+            // Add validation rules here
+          >
+            <Input />
+          </Form.Item> */}
+
           <Form.Item<IOrder>
             label="Status"
             name="status"
             rules={[{ required: true, message: "" }]}
+
+            // Add validation rules here
           >
-            <Select options={getFormItemOptions()} />
+            <Input />
           </Form.Item>
+
+          {/* Repeat this for other fields in the order */}
 
           <Form.Item hidden label="Id" name="_id">
             <Input />
           </Form.Item>
+        </Form>
+      </Modal>
+
+      {/* Modal for creating a new order */}
+      <Modal
+        title="Create Order"
+        open={isModalCreateOpen}
+        onOk={handleCreateOk}
+        onCancel={handleCreateCancel}
+      >
+        <Form
+          form={createForm}
+          name="create-form"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          initialValues={{ remember: true }}
+          onFinish={onFinishCreate}
+          onFinishFailed={onFinishCreateFailed}
+          autoComplete="off"
+        >
+          {/* Form fields for creating a new order */}
+          {/* <Form.Item<IOrder>
+            label="Created Date"
+            name="createdDate"
+            // Add validation rules here
+          >
+            <Input />
+          </Form.Item> */}
+
+          {/* Repeat this for other fields in the order */}
         </Form>
       </Modal>
     </>
