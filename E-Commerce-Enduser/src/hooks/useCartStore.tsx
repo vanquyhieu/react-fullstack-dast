@@ -12,9 +12,9 @@ interface CartStore {
   total: number; //Tổng tiền
   itemCount: number; //Tổng items có trong giỏ
   addItem: (item: Purchase) => void; //phương thức thêm item
-  removeItem: (id: number) => void; //phương thức xóa item
-  increaseQuantity: (id: number) => void; //tăng số lượng của item
-  decreaseQuantity: (id: number) => void; //giảm số lượng của item
+  removeItem: (id: string) => void; //phương thức xóa item
+  increaseQuantity: (id: string) => void; //tăng số lượng của item
+  decreaseQuantity: (id: string) => void; //giảm số lượng của item
   placeOrder:(payload: any)=> Promise<{ok: boolean, message: string}>;
   isLoading: boolean,
   error: string | null
@@ -30,13 +30,13 @@ export const useCartStore = create(
       error: null,
       addItem: (item) =>
         set((state) => {
-          const existingItem = state.items.find((i) => i.productId === item.productId);
+          const existingItem = state.items.find((i) => i.product_Id === item.product_Id);
           if (existingItem) {
             // Nếu mặt hàng đã tồn tại, tăng số lượng lên 1
             return {
               ...state,
               items: state.items.map((i) =>
-                i.productId === item.productId ? { ...i, buy_count: i.buy_count + 1 } : i
+                i.product_Id === item.product_Id ? { ...i, buy_count: i.buy_count + 1 } : i
               ),
               total: state.total + item.price,
               itemCount: state.itemCount + 1,
@@ -53,24 +53,24 @@ export const useCartStore = create(
         }),
       removeItem: (id) =>
         set((state) => {
-          const itemToRemove = state.items.find((item) => item.productId === id);
+          const itemToRemove = state.items.find((item) => item.product_Id === id);
           if (!itemToRemove) return state;
 
           return {
-            items: state.items.filter((item) => item.productId !== id),
+            items: state.items.filter((item) => item.product_Id !== id),
             total: state.total - itemToRemove.price * itemToRemove.buy_count,
             itemCount: state.itemCount - itemToRemove.buy_count,
           };
         }),
       increaseQuantity: (id) =>
         set((state) => {
-          const item = state.items.find((i) => i.productId === id);
+          const item = state.items.find((i) => i.product_Id === id);
           if (!item) return state;
 
           return {
             ...state,
             items: state.items.map((i) =>
-              i.productId === id ? { ...i, buy_count: i.buy_count + 1 } : i
+              i.product_Id === id ? { ...i, buy_count: i.buy_count + 1 } : i
             ),
             total: state.total + item.price,
             itemCount: state.itemCount + 1,
@@ -78,13 +78,13 @@ export const useCartStore = create(
         }),
       decreaseQuantity: (id) =>
         set((state) => {
-          const item = state.items.find((i) => i.productId === id);
+          const item = state.items.find((i) => i.product_Id === id);
           if (!item || item.buy_count <= 0) return state;
 
           return {
             ...state,
             items: state.items.map((i) =>
-              i.productId === id ? { ...i, buy_count: i.buy_count - 1 } : i
+              i.product_Id === id ? { ...i, buy_count: i.buy_count - 1 } : i
             ),
             total: state.total - item.price,
             itemCount: state.itemCount - 1,

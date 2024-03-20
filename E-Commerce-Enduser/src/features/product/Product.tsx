@@ -12,7 +12,7 @@ const Product = ({ product }: ProductProps) => {
   return (
     <Link
       to={`${path.home}${generateNameId({
-        id: product.id,
+        id: product._id,
         name: product.name,
       })}`}
     >

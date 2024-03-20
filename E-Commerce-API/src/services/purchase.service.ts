@@ -4,7 +4,7 @@ import { IPurchase } from '../types/model';
 
 const getAllItems = async () => {
   
-  const purchase = Purchase.find({}, ' -__v ').populate('user');
+  const purchase = Purchase.find({}, ' -__v ').populate('user','firstName lastName email phoneNumber address');
   
   return purchase;
 };

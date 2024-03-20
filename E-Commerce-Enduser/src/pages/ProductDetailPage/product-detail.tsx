@@ -253,7 +253,7 @@ function ProductDetailPage() {
                                     LeftIcon={AiOutlineShoppingCart}
                                     onClick={()=>{
                                         addItem({
-                                          productId: product.id,
+                                          product_Id: product._id,
                                           name:product.name,
                                           price: product.price,
                                           price_before_discount: product.price_before_discount,

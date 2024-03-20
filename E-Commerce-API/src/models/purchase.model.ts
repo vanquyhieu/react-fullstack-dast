@@ -1,5 +1,5 @@
 import { Schema, Types, model } from 'mongoose';
-import { IPurchase, IProduct } from '../types/model';
+import { IPurchase } from '../types/model';
 
 const purchaseSchema = new Schema<IPurchase>(
   {
@@ -7,8 +7,8 @@ const purchaseSchema = new Schema<IPurchase>(
       type: Types.ObjectId,
      auto:true,
     },
-    productId:{ 
-      type:Number,
+    product_Id:{ 
+      type:Types.ObjectId,
     },
     name: {
       type: String,

@@ -71,7 +71,7 @@ export type purchasesStatus = -1 | 1 | 2 | 3 | 4 | 5;
 
 export interface IPurchase {
     _id?: ObjectId;
-    productId:number;
+    product_Id:ObjectId;
     name: string;
     price: number;
     price_before_discount: number;

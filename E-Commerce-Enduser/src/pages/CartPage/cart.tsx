@@ -53,7 +53,7 @@ export default function Cart() {
                                   className="h-20 w-20 flex-shrink-0"
                                   to={`${path.home}${generateNameId({
                                     name: item.name,
-                                    id: item.productId,
+                                    id: item.product_Id,
                                   })}`}
                                 >
                                   <img alt={item.name} src={item.images[0].url} />
@@ -62,7 +62,7 @@ export default function Cart() {
                                   <Link
                                     to={`${path.home}${generateNameId({
                                       name: item.name,
-                                      id: item.productId,
+                                      id: item.product_Id,
                                     })}`}
                                     className="text-left line-clamp-2"
                                   >
@@ -86,7 +86,7 @@ export default function Cart() {
                               <div className={'flex items-center'}>
                                 <button
                                   className="flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600"
-                                  onClick={() => decreaseQuantity(item.productId)}
+                                  onClick={() => decreaseQuantity(item.product_Id)}
                                 >
                                   <AiOutlineMinus />
                                 </button>
@@ -98,7 +98,7 @@ export default function Cart() {
                                 />
                                 <button
                                   className="flex h-8 w-8 items-center justify-center rounded-r-sm border border-gray-300 text-gray-600"
-                                  onClick={() => increaseQuantity(item.productId)}
+                                  onClick={() => increaseQuantity(item.product_Id)}
                                 >
                                   <AiOutlinePlus />
                                 </button>
@@ -109,7 +109,7 @@ export default function Cart() {
                               <span className="text-orange">₫{formatCurrency(item.price * item.buy_count)}</span>
                             </div>
                             <div className="col-span-1">
-                              <button className="bg-none text-black transition-colors hover:text-orange" onClick={() => removeItem(item.productId)}>
+                              <button className="bg-none text-black transition-colors hover:text-orange" onClick={() => removeItem(item.product_Id)}>
                                 Xóa
                               </button>
                             </div>
@@ -146,7 +146,7 @@ export default function Cart() {
                   onClick={() => {
                     items.map((item: Purchase) => {
                       placeOrder({
-                        productId: item.productId,
+                        product_Id: item.product_Id,
                         name:item.name,
                         buy_count: item.buy_count,
                         price:item.price,
