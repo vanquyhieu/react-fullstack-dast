@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 import { UserSchema, userSchema } from '../../utils/schema';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useAppContext } from '../../contexts/app.context';
 import { Controller, useForm } from 'react-hook-form';
 import userService from '../../services/user.service';
 import { getAvatarUrl, isAxiosUnprocessableEntityError, saveProfile } from '../../utils';
@@ -39,7 +38,6 @@ export default function Profile() {
     const preview = useMemo(() => {
         return file ? URL.createObjectURL(file) : '';
     }, [file]);
-    const {profile, setProfile } = useAppContext();
     const {
         control,
         handleSubmit,

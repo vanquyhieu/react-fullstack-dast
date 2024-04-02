@@ -11,10 +11,7 @@ import categoriesService from '../services/categories.service';
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // destructure page and limit and set default values
-    const page = req.query.page ? parseInt(req.query.page as string) : 1;
-    const limit = req.query.limit ? parseInt(req.query.limit as string) : 5;
-
-    const categories = await categoriesService.getAllItems(page, limit);
+    const categories = await categoriesService.getAllItems();
     sendJsonSuccess(res)(categories); // Gọi hàm mà có truyền giá trị cho data
   } catch (error) {
     next(error);
@@ -23,22 +20,13 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 
 const getItemById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const product = await categoriesService.getItemById(req.params.id);
-    sendJsonSuccess(res)(product);
+    const category = await categoriesService.getItemById(req.params.id);
+    sendJsonSuccess(res)(category);
   } catch (error) {
     next(error);
   }
 };
 
-const getItemByIdPerPage = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const payload = req.params.id;
-    const product = await categoriesService.getItemByIdPerPage(payload);
-    sendJsonSuccess(res)(product);
-  } catch (error) {
-    next(error);
-  }
-};
 
 const createItem = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -64,7 +52,7 @@ const updateItem = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteItem = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params ;
+    const  {id}  = req.params ;
     const deletedCategory = await categoriesService.deleteItem(id);
     sendJsonSuccess(res)(deletedCategory);
   } catch (err) {
@@ -75,7 +63,6 @@ const deleteItem = async (req: Request, res: Response, next: NextFunction) => {
 export default {
   getAll,
   getItemById,
-  getItemByIdPerPage,
   updateItem,
   createItem,
   deleteItem,

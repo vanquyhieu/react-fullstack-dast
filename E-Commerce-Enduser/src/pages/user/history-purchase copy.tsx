@@ -64,13 +64,15 @@ export default function HistoryPurchase() {
                                 className="mt-4 rounded-sm border-black/10 bg-white p-6 text-gray-800 shadow-sm"
                             >
                                 <Link
-                                    to={`${path.home}`}
+                                    to={`${path.home}${generateNameId({
+                                        name: purchase.name,
+                                        id: purchase._id,
+                                    })}`}
                                     className="flex"
                                 >
                                     <div className="flex-shrink-0">
                                         <img
                                             className="h-20 w-20 object-cover"
-                                            src={purchase.images[0].url}
                                         />
                                     </div>
                                     <div className="ml-3 flex-grow overflow-hidden">

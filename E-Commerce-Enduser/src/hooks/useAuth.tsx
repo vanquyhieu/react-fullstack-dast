@@ -2,10 +2,10 @@ import { create } from 'zustand';
 import { axiosClient } from '../library/axiosClient';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import config from '../constants/config';
-import { User } from '../contexts/app.context';
 import { json } from 'stream/consumers';
 import { saveProfile } from '../utils';
 import { toast } from 'react-toastify';
+import { User } from '../types/user.type';
 
 interface FormData {
   email: string;
@@ -50,27 +50,29 @@ const useAuth = create(
             console.log('dataUseAuth',data)
             toast.success(data.data.message);
             saveProfile(data.data.data)          
-            set({ user: data.data.data, isLoading: false });
+            set({ user: data.data.data, isLoading: false, isAuthenticated:true});
             //trả lại thông tin cho hàm login
-            return { error: '', isLoading: false, user: data.data.data, isAuthenticated:true };
+            return { error: '', isLoading: false, user: data.data.data, isAuthenticated: true };
           }
           //Ngược lại thất bại
           else {
-            set({ isLoading: false });
+            set({ isLoading: false, isAuthenticated: false  });
             return { isAuthenticated: false, isLoading: false, error: 'Username or password is invalid' };
           }
         } catch (error) {
           //Gọi API lỗi
           console.log('login error', error);
-          set({ isLoading: false });
+          set({ isLoading: false ,  isAuthenticated:false});
           return { isAuthenticated: false, isLoading: false, error: 'Login failed' };
         }
       },
       logout: () => {
         // Xóa trạng thái user và isAuthenticated
-        set({ user: null, isAuthenticated: false });
+        toast.success("See you again!")
+        set({ user: null, isAuthenticated: false, isLoading: false  });
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
+        sessionStorage.removeItem('auth-storage');
       },
     }),
     {

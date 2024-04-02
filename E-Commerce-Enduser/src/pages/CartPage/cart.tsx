@@ -149,6 +149,7 @@ export default function Cart() {
                         product_Id: item.product_Id,
                         name:item.name,
                         buy_count: item.buy_count,
+                        images: item.images,
                         price:item.price,
                         price_before_discount:item.price_before_discount,
                         status: 0,

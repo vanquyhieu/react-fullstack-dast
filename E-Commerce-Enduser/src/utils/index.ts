@@ -75,7 +75,7 @@ export const removeSpecialCharacter = (str: string) =>
         '',
     );
 
-export const generateNameId = ({ name, id }: { name: string; id: string }) => {
+export const generateNameId = ({ name, id }: { name: string; id: string | undefined }) => {
     return removeSpecialCharacter(name).replace(/\s/g, '-') + `-i,${id}`;
 };
 

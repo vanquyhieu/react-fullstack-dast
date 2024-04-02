@@ -2,12 +2,15 @@ import { Schema, model, Types } from 'mongoose';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 import buildSlug from '../helpers/buildSlug';
 import { IProduct } from '../types/model';
+import crypto from 'crypto';
+
 
 const arrayLimit = (val: any) => val.length <= 5;
 
 const imageSchema = new Schema({
   url: { type: String },
 });
+
 
 const productSchema = new Schema({
   _id:{
@@ -21,11 +24,23 @@ const productSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   description: {
     type: String,
   },
+  variants: [{
+    id: String,
+    name: String,
+    attributes: [{
+      name: String,
+      value: String
+    }],
+    prices: [{
+      option: String,
+      price: Number
+    }]
+  }],
+
   price_before_discount: {
     type: Number,
   },
@@ -112,13 +127,18 @@ productSchema.set('toObject', { virtuals: true });
 
 productSchema.plugin(mongooseLeanVirtuals);
 
-productSchema.pre('save', async function (next) {
+productSchema.pre('save', function(next) {
+  const product = this;
+
+  product.variants.forEach(variant => {
+    const hash = crypto.createHash('md5').update(`${product.name}_${variant.attributes[0].value}_${variant.attributes[1].value}`).digest('hex');
+    variant.id = hash;
+  });
+
   if (!this.slug && this.name) {
     this.slug = buildSlug(this.name);
   }
-
   next();
 });
-
 const Product = model<IProduct>('Product', productSchema);
 export default Product;

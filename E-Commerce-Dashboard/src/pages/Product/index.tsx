@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import React from "react";
 import {
   Button,
   Form,
@@ -9,34 +10,30 @@ import {
   Space,
   Table,
   Image,
-  // Button,
-  // Modal,
-  // Form,
-  // Input,
   message,
   Card,
   Popconfirm,
   Spin,
-  // Pagination,
+  Collapse,
+  Divider,
+  SelectProps,
 } from "antd";
-// import type { ColumnsType } from "antd/es/table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { axiosClient } from "../../library/axiosClient";
 import config from "../../constants/config";
-import React, { useState } from "react";
 import { AnyObject } from "antd/es/_util/type";
 import { ColumnsType } from "antd/es/table";
 import {
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
+  PlusOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import UploadImages from "../../components/ImageUpload";
-import form from "antd/es/form";
-import axios from "axios";
-
+import Panel from "antd/es/cascader/Panel";
+import { formatCurrency } from "../../utils";
 
 type responseType = {
   destination: string;
@@ -62,21 +59,23 @@ type imagesType = {
   _id?: string;
   url: string;
 };
-
 interface DataType {
   _id: string;
   id: number;
   name: string;
-  description:string;
+  description: string;
   price: number;
-  price_before_discount:number;
+  price_before_discount: number;
   quantity: number;
-  sold?:number;
+  sold?: number;
   category: categoryType;
   supplier: supplierType;
   images: imagesType[];
 }
-
+type SelectWithNameProps = SelectProps & {
+  name: (string | number)[];
+  value: (string | number)[];
+};
 const ProductPage = () => {
   const navigate = useNavigate();
   //message edit
@@ -87,9 +86,6 @@ const ProductPage = () => {
   const [isModalCreateOpen, setIsModalCreateOpen] = React.useState(false);
   //upload
   const [fileList, setFileList] = React.useState<itemType[]>([]);
-
-  console.log("fileList", fileList);
-
   let filePathFormat: (string | undefined)[] = [];
   if (fileList.length > 0) {
     filePathFormat = fileList.map((item) => {
@@ -99,7 +95,6 @@ const ProductPage = () => {
       }
     });
   }
-  console.log("filePathFormat", filePathFormat);
   // create product
   const onFinish = async (values: DataType) => {
     console.log("Success:", values);
@@ -107,34 +102,25 @@ const ProductPage = () => {
   const onFinishFailed = (errorInfo: AnyObject) => {
     console.log("Failed:", errorInfo);
   };
-
   //======= lấy sản phẩm  =====//
-  // Access the client
   const queryClient = useQueryClient();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["products"],
     queryFn: async () =>
-      await axiosClient.get(`http://localhost:3000/api/v1/products/product-list`),
+      await axiosClient.get(`http://localhost:3000/api/v1/products`),
   });
-  // console.log("queryProducts", data);
-
   //======= lấy danh mục  =====//
   const queryCategories = useQuery({
     queryKey: ["categories"],
     queryFn: async () =>
       await axiosClient.get(`http://localhost:3000/api/v1/categories`),
   });
-  // const currentCategory = queryCategories?.data?.data.data.categories.find(
-  //   (item) => item._id === currentCategoryId
-  // );
   //======= lấy suppliers  =====//
   const querySuppliers = useQuery({
     queryKey: ["suppliers"],
     queryFn: async () =>
       await axiosClient.get(`http://localhost:3000/api/v1/suppliers`),
   });
-  // console.log("querySuppliers", querySuppliers);
-
   //======= Sự kiện XÓA =====//
   const fetchDelete = async (_id: string) => {
     return await axiosClient.delete(config.urlAPI + "/v1/products/" + _id);
@@ -237,7 +223,6 @@ const ProductPage = () => {
     setIsModalCreateOpen(false);
     console.log("Create cancel");
   };
-
   //hàm lấy thông tin từ form Create
   const onFinishCreate = async (values: DataType) => {
     console.log("Success:", values); //=> chính là thông tin ở form edit
@@ -268,8 +253,6 @@ const ProductPage = () => {
     console.log("productsItem", products);
     productData = products;
   }
-  // console.log("productData", productData);
-
   //======= begin logic id max =====//
   let max: string | null = null; // Khai báo biến max trước khi vào hàm if
   if (productData) {
@@ -288,7 +271,6 @@ const ProductPage = () => {
   // Nếu max chưa được gán giá trị (nghĩa là chưa có categoriesData), hãy bắt đầu với ID là 1
   const newId = max ? Number(max) + 1 : 1;
   //end logic id max
-
   // ERR fetchdata
   if (isError) {
     let errorMessage = "Failed to do something exceptional";
@@ -298,7 +280,6 @@ const ProductPage = () => {
     console.log("errorMessage", errorMessage);
     // return <div>Error: {error.message}</div>;
   }
-
   // Column Page product
   const columns: ColumnsType<DataType> = [
     //id
@@ -337,9 +318,25 @@ const ProductPage = () => {
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
+      render: (text, record) => (
+        <Collapse
+          items={[
+            {
+              key: `{${record.id}}`,
+              label: "Mô tả",
+              children: <p>{text}</p>,
+            },
+          ]}
+        />
+      ),
     },
     //price
-    { title: "Giá", dataIndex: "price", key: "price" },
+    {
+      title: "Giá",
+      dataIndex: "price",
+      key: "price",
+      render: (_text, record) => <p>{formatCurrency(record.price)}</p>,
+    },
     //stock
     { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
     //discount
@@ -347,6 +344,9 @@ const ProductPage = () => {
       title: "Giá gốc",
       dataIndex: "price_before_discount",
       key: "price_before_discount",
+      render: (_text, record) => (
+        <p>{formatCurrency(record.price_before_discount)}</p>
+      ),
     },
     //category
     {
@@ -378,11 +378,12 @@ const ProductPage = () => {
             onClick={() => {
               console.log("Edit this item");
               setIsModalEditOpen(true); //show modal edit lên
-              updateForm.setFieldsValue({...record,
-                 supplierId: record.supplier._id,
-                  categoryId: record.category._id
-                });            
-              }}
+              updateForm.setFieldsValue({
+                ...record,
+                supplierId: record.supplier._id,
+                categoryId: record.category._id,
+              });
+            }}
           />
           <Popconfirm
             title="Are you sure to delete?"
@@ -462,6 +463,136 @@ const ProductPage = () => {
               >
                 <Input />
               </Form.Item>
+              {/*variants*/}
+              <Form.List name="variants">
+                {(fields, { add, remove }) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      flexDirection: "column",
+                    }}
+                  >
+                    {fields.map((field) => (
+                      <Card
+                        size="default"
+                        title={`Loại ${field.name + 1}`}
+                        key={field.key}
+                        extra={
+                          <CloseOutlined
+                            onClick={() => {
+                              remove(field.name);
+                            }}
+                          />
+                        }
+                      >
+                        {/* Nest Form.List */}
+                        <Form.Item label="attributes">
+                          <Form.List name={[field.name, "attributes"]}>
+                            {(subFields, subOpt) => (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                {subFields.map((subField) => (
+                                  <Space
+                                   key={subField.key}
+                                    
+                                  >
+                                    <Form.Item
+                                      name={[subField.name,"name"]}
+                                      style={{ width: '8rem' }}
+                                    >
+                                      <Select>
+                                        <Select.Option value="Color">Color</Select.Option>
+                                        <Select.Option value="Size">Size</Select.Option>
+                                      </Select>
+                                    </Form.Item>
+                                    <Form.Item
+                                      name={[subField.name,"value"]}
+                                      style={{ width: '8rem' }}
+                                    >
+                                      <Select>
+                                        <Select.Option value="Black">Black</Select.Option>
+                                        <Select.Option value="16Gb">16Gb</Select.Option>
+                                      </Select>
+                                    </Form.Item>
+                                    <CloseOutlined
+                                      onClick={() => {
+                                        subOpt.remove(subField.name);
+                                      }}
+                                    />
+                                  </Space>
+                                ))}
+                                <Button
+                                  type="dashed"
+                                  onClick={() => subOpt.add()}
+                                  block
+                                >
+                                  + Add Sub Item
+                                </Button>
+                              </div>
+                            )}
+                          </Form.List>
+                        </Form.Item>
+                        <Form.Item label="prices">
+                          <Form.List name={[field.name, "prices"]}>
+                            {(subFields, subOpt) => (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                {subFields.map((subField) => (
+                                  <Space
+                                   key={subField.key}
+                                    
+                                  >
+                                    <Form.Item
+                                      name={[subField.name,"option"]}
+                                      style={{ width: '8rem' }}
+                                    >
+                                      <Select>
+                                        <Select.Option value="default">default</Select.Option>
+                                        <Select.Option value="sales">sales</Select.Option>
+                                      </Select>
+                                    </Form.Item>
+                                    <Form.Item
+                                      name={[subField.name,"price"]}
+                                      style={{ width: '8rem' }}
+                                    >
+                                      <Input type="number"></Input>
+                                    </Form.Item>
+                                    <CloseOutlined
+                                      onClick={() => {
+                                        subOpt.remove(subField.name);
+                                      }}
+                                    />
+                                  </Space>
+                                ))}
+                                <Button
+                                  type="dashed"
+                                  onClick={() => subOpt.add()}
+                                  block
+                                >
+                                  + Add Sub Item
+                                </Button>
+                              </div>
+                            )}
+                          </Form.List>
+                        </Form.Item>
+                      </Card>
+                    ))}
+
+                    <Button type="dashed" onClick={() => add()} block>
+                      + Loại sản phẩm
+                    </Button>
+                  </div>
+                )}
+              </Form.List>
               {/* Giá */}
               <Form.Item<DataType>
                 label="Giá hiện tại"
@@ -627,7 +758,7 @@ const ProductPage = () => {
               </Form.Item>
 
               <Form.Item<DataType>
-                label="metaDescription"
+                label="Description"
                 name="description"
                 rules={[{ max: 500, message: "Tối đa 500 kí tự" }]}
               >
@@ -644,7 +775,11 @@ const ProductPage = () => {
                 <Select>
                   {queryCategories?.data?.data.data.categories.map(
                     (item: categoryType) => (
-                      <Select.Option key={item._id} value={item._id} name={item.name}>
+                      <Select.Option
+                        key={item._id}
+                        value={item._id}
+                        name={item.name}
+                      >
                         {item.name}
                       </Select.Option>
                     )
@@ -662,7 +797,11 @@ const ProductPage = () => {
                 <Select>
                   {querySuppliers?.data?.data.data.supplier.map(
                     (item: supplierType) => (
-                      <Select.Option key={item._id} value={item._id} name={item.name}>
+                      <Select.Option
+                        key={item._id}
+                        value={item._id}
+                        name={item.name}
+                      >
                         {item.name}
                       </Select.Option>
                     )

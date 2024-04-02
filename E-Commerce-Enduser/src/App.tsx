@@ -2,22 +2,22 @@ import { ToastContainer } from 'react-toastify';
 import { useRouteElements } from './routes';
 import { useEffect } from 'react';
 import { LocalStorageEventTarget } from './utils';
-import { useAppContext } from './contexts/app.context';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from './hooks/useAuth';
 
 function App() {
   const routeElements = useRouteElements();
-    const { reset } = useAppContext();
+    const { logout } = useAuth();
     useEffect(() => {
-        LocalStorageEventTarget.addEventListener('clearLocalStorage', reset);
+        LocalStorageEventTarget.addEventListener('clearLocalStorage', logout);
 
         return () => {
             LocalStorageEventTarget.removeEventListener(
                 'clearLocalStorage',
-                reset,
+                logout,
             );
         };
-    }, [reset]);
+    }, [logout]);
   return (
     <>
      <ToastContainer

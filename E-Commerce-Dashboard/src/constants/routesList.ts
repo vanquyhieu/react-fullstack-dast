@@ -33,7 +33,7 @@ const privateRoutes: Routes[] = [
     {id: 3, path: '/suppliers', element: Suppliers},
     {id: 4, path: '/categories', element: Category},
     {id: 5, path: '/categories/add', element: CategoryAdd},
-    {id: 6, path: '/categories/edit', element: CategoryEdit},
+    {id: 6, path: '/categories/edit/:id', element: CategoryEdit},
     {id: 7, path: '/orders', element: Order},
     {id: 8, path: '/customers', element: Customers},
     {id: 9, path: '/employees', element: Employees},

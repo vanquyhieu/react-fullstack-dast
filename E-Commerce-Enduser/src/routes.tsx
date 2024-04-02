@@ -1,13 +1,9 @@
 import { Navigate, Outlet, useRoutes } from 'react-router';
 import { CartLayout, MainLayout, RegisterLayout } from './components/layouts';
 import { path } from './constants';
-import { useAppContext } from './contexts/app.context';
 import UserLayout from './pages/user/layouts/UserLayout';
 import { Suspense, lazy } from 'react';
-// import { ProfilePage } from './pages/user';
-// import RegisterPage from './pages/RegisterPage/register';
-// import { ProfilePage } from './pages/user';
-// import ProductDetailPage from './pages/ProductDetailPage/product-detail';
+import useAuth from './hooks/useAuth';
 
 const LoginPage = lazy(() => import('./pages/LoginPage/login'));
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -20,12 +16,12 @@ const CartPage = lazy(() => import('./pages/CartPage/cart'));
 // const NotFoundPage = lazy(() => import('./pages/notFound'));
 
 function ProtectedRoute() {
-    const { isAuthenticated } = useAppContext();
+    const { isAuthenticated } = useAuth();
     return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />;
 }
 
 function RejectedRoute() {
-    const { isAuthenticated } = useAppContext();
+    const { isAuthenticated } = useAuth();
     return !isAuthenticated ? <Outlet /> : <Navigate to={path.home} />;
 }
 

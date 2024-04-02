@@ -2,7 +2,6 @@ import {create} from 'zustand';
 import { persist,createJSONStorage } from 'zustand/middleware';
 import { axiosClient } from '../library/axiosClient';
 import config from '../constants/config';
-import httpRequest from '../utils/http';
 import { Purchase } from '../types/purchase.type';
 
 

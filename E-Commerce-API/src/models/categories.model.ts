@@ -1,6 +1,4 @@
 // categoriesModel.ts
-
-import { number } from 'joi';
 import { Schema, model, Types } from 'mongoose';
 import slugify from 'slugify';
 import { ICategory } from '../types/model';

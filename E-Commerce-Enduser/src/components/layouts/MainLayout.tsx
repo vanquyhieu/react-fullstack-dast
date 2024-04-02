@@ -7,9 +7,9 @@ export interface ILayout {
 
 function MainLayout({ children, isHeader = true }: ILayout) {
     return (
-        <div className="flex h-screen flex-col justify-between w-full p-0 m-0">
+        <div className="flex-col h-screen justify-between w-full p-0 m-0">
             {isHeader && <Header />}
-            <div className="flex-grow w-full ml-8">{children}</div>
+            <div>{children}</div>
             <Footer />
         </div>
     );

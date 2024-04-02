@@ -26,11 +26,6 @@ export interface Product {
 
 export interface ProductList {
     products: Product[];
-    // pagination: {
-    //     page: number;
-    //     limit: number;
-    //     page_size: number;
-    // };
     pagination:{
         totalRecords: number ;
         totalPages:number ;

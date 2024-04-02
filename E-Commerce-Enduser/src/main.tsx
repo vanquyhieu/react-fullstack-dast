@@ -6,28 +6,24 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
-import { AppProvider } from './contexts/app.context';
 import ErrorBoundary from './components/shared/ErrorBoundary';
 
 // Create a client
-// const queryClient = new QueryClient({
-//     defaultOptions: {
-//         queries: {
-//             refetchOnWindowFocus: false,
-//         },
-//     },
-// });
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <BrowserRouter>
             <QueryClientProvider client={queryClient}>
-                <AppProvider>
                     <ErrorBoundary>
                         <App />
                     </ErrorBoundary>
-                </AppProvider>
                 {process.env.NODE_ENV === 'development' && (
                     <ReactQueryDevtools initialIsOpen={false} />
                 )}

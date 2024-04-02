@@ -30,7 +30,6 @@ const path = {
     login: '/login',
     register: '/register',
     logout: '/logout',
-    purchase: '/history-purchase',
     productDetail: ':nameId',
     cart: '/cart',
 } as const;

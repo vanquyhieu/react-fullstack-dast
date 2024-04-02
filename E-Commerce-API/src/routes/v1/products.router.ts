@@ -9,12 +9,13 @@ import productsController from '../../controllers/products.controller';
 const router = express.Router();
 
 //Get All products from DB
-router.get('/product-list/', productsController.getAll);
+router.get('/', productsController.getAll);
 
 //get user by ID
 //Gắn middleware vào để check id có phải là số không
 router.get('/:id?', productsController.getItemById);
-router.get('/product-list/:category?', productsController.getItemByParams);
+
+router.get('/history-purchase', productsController.getItemByParams);
 
 //Create a new user
 router.post('/', productsController.createItem);

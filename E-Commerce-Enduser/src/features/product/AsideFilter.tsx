@@ -1,19 +1,19 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { useForm } from 'react-hook-form';
 import { createSearchParams, Link, useNavigate } from 'react-router-dom';
-
-import { Button, InputField } from '../../components/shared';
 import { path } from '../../constants';
 import { useSchemaValidate } from '../../hooks';
 import { QueryConfig } from '../../pages/HomePage';
 import { Category } from '../../types/category.type';
 import RatingStars from './RatingStars';
+import DynamicSlides from '../../components/shared/DynamicSlider';
+import { useState } from 'react';
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
 interface Props {
   queryConfig: QueryConfig;
-  categoriesAsider: Category[]
+  categoriesAsider: Category[];
 }
 
 interface FormState {
@@ -22,12 +22,15 @@ interface FormState {
 }
 
 const AsideFilter = ({ categoriesAsider, queryConfig }: Props) => {
+  const [displayedCategories, setDisplayedCategories] = useState<Category[]>(categoriesAsider.slice(0, 12));
+  const [active, setActive] = useState(false);
+
   const navigate = useNavigate();
   const { category: categoryId } = queryConfig;
-  console.log("categoryAsider",categoriesAsider)
+  console.log('categoryAsider', categoriesAsider);
 
   const schema = useSchemaValidate('priceMinMax');
-  
+
   const { handleSubmit, control, reset } = useForm<FormState>({
     defaultValues: {
       price_min: '',
@@ -55,9 +58,12 @@ const AsideFilter = ({ categoriesAsider, queryConfig }: Props) => {
     });
   };
 
+  if (categoriesAsider.length < 12) {
+    setActive(true);
+  } 
   return (
-    <div className="py-4">
-      <Link to={path.home} className="flex items-center font-bold">
+    <div className="py-3 flex-col">
+      <Link to={path.home} className="flex items-center font-semibold text-gray-400">
         <svg viewBox="0 0 12 10" className="mr-3 h-4 w-3 fill-current">
           <g fillRule="evenodd" stroke="none" strokeWidth={1}>
             <g transform="translate(-373 -208)">
@@ -71,13 +77,22 @@ const AsideFilter = ({ categoriesAsider, queryConfig }: Props) => {
             </g>
           </g>
         </svg>
-        Tất cả danh mục
+        Danh mục
       </Link>
       <div className="my-4 h-[1px] bg-gray-300" />
-
-      <ul>
-        {categoriesAsider.map((category) => (
-          <li className="py-2 pl-2 hover:text-gray-500" key={category._id}>
+      <br></br>
+      <button
+        className="absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white"
+        onClick={() => {
+          // Update the displayed categories to include the next 2 categories
+          setDisplayedCategories(() => [...categoriesAsider.slice(0,12)]);
+        }}      
+      >
+        <BsChevronLeft />
+      </button>
+      <ul className="flex">
+        {displayedCategories.map((category) => (
+          <li className="flex flex-wrap justify-between items-center text-center hover:text-gray-500 border hover:border-slate-500 w-28 h-32  " key={category._id}>
             <Link
               to={{
                 pathname: path.home,
@@ -90,71 +105,26 @@ const AsideFilter = ({ categoriesAsider, queryConfig }: Props) => {
                 'font-semibold text-primary': categoryId === category._id,
               })}
             >
-              {categoryId === category._id && (
-                <svg viewBox="0 0 4 7" className="absolute top-1 left-[-10px] h-2 w-2 fill-current">
-                  <polygon points="4 3.5 0 0 0 7" />
-                </svg>
-              )}
+              <div>
+                <img src={`${category.images[0].url}`}></img>
+              </div>
               {category.name}
             </Link>
           </li>
         ))}
       </ul>
-
-      <Link to={path.home} className="mt-4 flex items-center font-bold uppercase">
-        <svg enableBackground="new 0 0 15 15" viewBox="0 0 15 15" x={0} y={0} className="mr-3 h-4 w-3 fill-current stroke-current">
-          <g>
-            <polyline
-              fill="none"
-              points="5.5 13.2 5.5 5.8 1.5 1.2 13.5 1.2 9.5 5.8 9.5 10.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeMiterlimit={10}
-            />
-          </g>
-        </svg>
-        Bộ lọc tìm kiếm
-      </Link>
+      <button
+        className="absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white"
+        onClick={() => {
+          if (active){
+            // Update the displayed categories to include the next 2 categories
+            setDisplayedCategories(() => [...categoriesAsider.slice(12, categoriesAsider.length)]);
+          }
+        }}      
+      >
+        <BsChevronRight />
+      </button>
       <div className="my-4 h-[1px] bg-gray-300" />
-
-      <div className="my-5">
-        <div>Giá</div>
-        <form className="mt-2" onSubmit={handleSubmit(handleFilterByPrice)}>
-          <div className="mb-2 flex items-start">
-            <InputField
-              type="text"
-              control={control}
-              className="grow"
-              name="price_min"
-              placeholder="₫ TỪ"
-              containerInputClassName="p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm"
-              onlyNumber
-            />
-            <div className="mx-2 mt-2 shrink-0">-</div>
-            <InputField
-              type="text"
-              control={control}
-              className="grow"
-              name="price_max"
-              placeholder="₫ ĐẾN"
-              containerInputClassName="p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm"
-              onlyNumber
-            />
-          </div>
-          <Button primary type="submit">
-            Áp dụng
-          </Button>
-        </form>
-      </div>
-      <div className="my-4 h-[1px] bg-gray-300" />
-
-      <div className="text-sm">Đánh giá</div>
-      <RatingStars queryConfig={queryConfig} />
-      <div className="my-4 h-[1px] bg-gray-300" />
-
-      <Button primary onClick={handleRemoveAll}>
-        Xóa tất cả
-      </Button>
     </div>
   );
 };

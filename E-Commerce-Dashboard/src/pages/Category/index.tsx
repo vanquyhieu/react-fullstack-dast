@@ -53,17 +53,16 @@ const Category = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const msgSuccess = () => {
-    messageApi.open({
-      type: "success",
-      content: "Thêm mới danh mục thành công",
-    });
-  };
-
   const msgError = () => {
     messageApi.open({
       type: "error",
       content: "This is an error message",
+    });
+  };
+  const msgDeleteSuccess = () => {
+    messageApi.open({
+      type: "success",
+      content: "Xoá danh mục thành công",
     });
   };
 
@@ -75,8 +74,8 @@ const Category = () => {
     mutationFn: fetchDelete,
     onSuccess: () => {
       console.log("Xóa danh mục thành công !");
-      msgSuccess();
-      // Sau khi thêm mới thành công thì update lại danh sách sản phẩm dựa vào queryKey
+      msgDeleteSuccess();
+      // Sau khi xoá thành công thì update lại danh sách sản phẩm dựa vào queryKey
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
     onError: (err) => {
@@ -122,7 +121,7 @@ const Category = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text) => <a>{text}</a>,
+      render: (_text, record) => {return record.name;}
     },
 
     {
@@ -135,7 +134,7 @@ const Category = () => {
             icon={<EditOutlined />}
             onClick={() => {
               console.log("EDIT", record);
-              navigate(`/categories/edit/${record.id}`);
+              navigate(`/categories/edit/${record._id}`);
             }}
           />
           <Popconfirm
@@ -143,7 +142,7 @@ const Category = () => {
             onConfirm={() => {
               // DELETE
               console.log("DELETE", record);
-              deleteMutation.mutate(record.id);
+              deleteMutation.mutate(record._id);
             }}
             icon={<QuestionCircleOutlined style={{ color: "red" }} />}
             onCancel={() => {}}

@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAppContext } from '../../contexts/app.context';
 import { authService } from '../../services';
 import { useSchemaValidate } from '../../hooks';
 import { toast } from 'react-toastify';
@@ -21,7 +20,7 @@ function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const { setIsAuthenticated, setProfile } = useAppContext();
+  const { isAuthenticated } = useAuth();
 
   const loginMutation = useMutation({
     mutationFn: (body: FormData) => {
@@ -42,7 +41,7 @@ function LoginPage() {
   const handleLogin = (payload: FormData) => {
     loginMutation.mutate(payload, {
       onSuccess: (data) => {
-        setIsAuthenticated(true);
+        ()=> isAuthenticated === true
         navigate('/');
         reset();
       },

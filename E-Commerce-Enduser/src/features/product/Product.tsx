@@ -24,15 +24,9 @@ const Product = ({ product }: ProductProps) => {
         <div className="overflow-hidden p-2">
           <div className="min-h-[2rem] text-base line-clamp-2">{product.name}</div>
 
-          <div className="mt-3 flex items-center">
-            <div className="max-w-[50%] truncate text-gray-500 line-through">
-              <span className="text-xs">₫</span>
-              <span className="text-sm">{formatCurrency(product.price_before_discount)}</span>
-            </div>
-            <div className="ml-1 truncate text-red-600">
-              <span className="text-xs">₫</span>
-              <span className="text-sm">{formatCurrency(product.price)}</span>
-            </div>
+          <div className="mt-3 flex justify-center text-red-600">
+              <span className=" text-xl">₫</span>
+              <span className="text-xl">{formatCurrency(product.price)}</span>
           </div>
 
           <div className="mt-3 flex items-center justify-end">

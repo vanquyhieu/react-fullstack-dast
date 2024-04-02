@@ -1,7 +1,6 @@
 import { axiosClient } from "../library/axiosClient.ts";
 import { SuccessResponseApi } from "../types/util.type.ts";
 import { User } from "../utils";
-import httpRequest from "../utils/http";
 
 interface BodyUpdateProfile
     extends Omit<
@@ -17,10 +16,10 @@ const userService = {
     //     return axiosClient.get<SuccessResponseApi<User>>('/api/v1/auth/profileClient');
     // },
     updateProfile(body: BodyUpdateProfile) {
-        return httpRequest.put<SuccessResponseApi<User>>('user', body);
+        return axiosClient.put<SuccessResponseApi<User>>('user', body);
     },
     uploadAvatar(body: FormData) {
-        return httpRequest.post<SuccessResponseApi<string>>(
+        return axiosClient.post<SuccessResponseApi<string>>(
             'user/upload-avatar',
             body,
             {

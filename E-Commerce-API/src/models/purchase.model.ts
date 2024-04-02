@@ -9,6 +9,8 @@ const purchaseSchema = new Schema<IPurchase>(
     },
     product_Id:{ 
       type:Types.ObjectId,
+      ref: 'Product',
+
     },
     name: {
       type: String,
