@@ -37,6 +37,10 @@ function ProductDetailPage() {
     keepPreviousData: true,
   });
   const product = productData?.data.data;
+  console.log('product?.description', product?.description);
+
+  // const raw = product?.description.split('.');
+  // console.log('raw', raw);
 
   const queryConfig: ProductListConfig = {
     limit: '20',
@@ -237,13 +241,16 @@ function ProductDetailPage() {
       <div className="container">
         <div className="mt-8 bg-white p-4 shadow">
           <div className="rounded bg-gray-50 p-4 text-lg capitalize text-slate-700">Mô tả sản phẩm</div>
-          <div className="mx-4 mt-12 mb-4 text-sm leading-loose">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(product.description), // * DOMPurify để loại bỏ các đoạn mã js
-              }}
-            />
-          </div>
+          {/* <div className="mx-4 mt-12 mb-4 text-sm leading-loose">
+            {raw?.map((item) => {
+              return (
+                <div>
+                  <p className="text-gray-700">{item}</p>
+                  <br />
+                </div>
+              );
+            })}
+          </div> */}
         </div>
       </div>
 

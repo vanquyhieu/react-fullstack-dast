@@ -11,7 +11,6 @@ import InputField from '../../components/shared/InputField.tsx';
 import Button from '../../components/shared/Button.tsx';
 import { path } from '../../constants/index.ts';
 import omit from 'lodash/omit';
-import { useAppContext } from '../../contexts/app.context.tsx';
 
 interface FormData {
     email: string;
@@ -20,7 +19,6 @@ interface FormData {
 }
 
 function RegisterPage() {
-    const { setIsAuthenticated, setProfile } = useAppContext();
 
     const registerMutation = useMutation({
         mutationFn: (body: Omit<FormData, 'confirmPassword'>) => {
@@ -42,8 +40,6 @@ function RegisterPage() {
         const body = omit(payload, ['confirmPassword']);
         registerMutation.mutate(body, {
             onSuccess: (data) => {
-                setIsAuthenticated(true);
-                setProfile(data.data.data.user);
                 toast.success(data.data.message);
                 reset();
             },
@@ -106,7 +102,7 @@ function RegisterPage() {
                                 name="confirmPassword"
                                 control={control}
                                 type="password"
-                                placeholder="Password"
+                                placeholder="confirmPassword"
                                 autoComplete="on"
                             />
                             <div className="mt-3">

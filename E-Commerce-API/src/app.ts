@@ -55,21 +55,7 @@ app.post('/file/upload', upload.single('file'),(req, res, next) => {
   res.send(file)
 });
 
-app.delete('/delete-file', async (req, res) => {
-  try {
-    const file = req.file;
-    if (file) {
-      const filePath = path.join(__dirname, file.path); // Đảm bảo đường dẫn chính xác
 
-      await fs.promises.unlink(filePath);
-
-      res.status(200).send('File deleted successfully');
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error deleting file');
-  }
-});
 // Handle Errors App
 
 // catch 404 and forward to error handler

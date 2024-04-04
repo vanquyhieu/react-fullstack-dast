@@ -7,9 +7,9 @@ import { useSchemaValidate } from '../../hooks';
 import { QueryConfig } from '../../pages/HomePage';
 import { Category } from '../../types/category.type';
 import RatingStars from './RatingStars';
-import DynamicSlides from '../../components/shared/DynamicSlider';
 import { useState } from 'react';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import SimpleSlider from '../../components/shared/SimpleSlider';
 
 interface Props {
   queryConfig: QueryConfig;
@@ -60,9 +60,10 @@ const AsideFilter = ({ categoriesAsider, queryConfig }: Props) => {
 
   if (categoriesAsider.length < 12) {
     setActive(true);
-  } 
+  }
   return (
     <div className="py-3 flex-col">
+      <div className="my-4 h-[1px] bg-gray-300" />
       <Link to={path.home} className="flex items-center font-semibold text-gray-400">
         <svg viewBox="0 0 12 10" className="mr-3 h-4 w-3 fill-current">
           <g fillRule="evenodd" stroke="none" strokeWidth={1}>
@@ -80,19 +81,12 @@ const AsideFilter = ({ categoriesAsider, queryConfig }: Props) => {
         Danh mục
       </Link>
       <div className="my-4 h-[1px] bg-gray-300" />
-      <br></br>
-      <button
-        className="absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white"
-        onClick={() => {
-          // Update the displayed categories to include the next 2 categories
-          setDisplayedCategories(() => [...categoriesAsider.slice(0,12)]);
-        }}      
-      >
-        <BsChevronLeft />
-      </button>
-      <ul className="flex">
+      <ul className="flex flex-wrap">
         {displayedCategories.map((category) => (
-          <li className="flex flex-wrap justify-between items-center text-center hover:text-gray-500 border hover:border-slate-500 w-28 h-32  " key={category._id}>
+          <li
+            className="flex flex-wrap justify-between items-center text-center hover:text-gray-500 border hover:border-slate-500 w-28 h-32  "
+            key={category._id}
+          >
             <Link
               to={{
                 pathname: path.home,
@@ -113,17 +107,6 @@ const AsideFilter = ({ categoriesAsider, queryConfig }: Props) => {
           </li>
         ))}
       </ul>
-      <button
-        className="absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white"
-        onClick={() => {
-          if (active){
-            // Update the displayed categories to include the next 2 categories
-            setDisplayedCategories(() => [...categoriesAsider.slice(12, categoriesAsider.length)]);
-          }
-        }}      
-      >
-        <BsChevronRight />
-      </button>
       <div className="my-4 h-[1px] bg-gray-300" />
     </div>
   );

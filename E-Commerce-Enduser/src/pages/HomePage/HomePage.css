@@ -1,0 +1,9 @@
+.section-banner-hotword--no-skin {
+  padding-top: 30px;
+  margin-top: 0;
+  background-color: #fff;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 0.125rem;
+  overflow: hidden;
+  overflow: visible;
+}
