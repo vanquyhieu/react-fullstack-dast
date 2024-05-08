@@ -62,7 +62,7 @@ const AsideFilter = ({ categoriesAsider, queryConfig }: Props) => {
     setActive(true);
   }
   return (
-    <div className="py-3 flex-col">
+    <div className="py-3 flex-col ">
       <div className="my-4 h-[1px] bg-gray-300" />
       <Link to={path.home} className="flex items-center font-semibold text-gray-400">
         <svg viewBox="0 0 12 10" className="mr-3 h-4 w-3 fill-current">
@@ -81,10 +81,10 @@ const AsideFilter = ({ categoriesAsider, queryConfig }: Props) => {
         Danh mục
       </Link>
       <div className="my-4 h-[1px] bg-gray-300" />
-      <ul className="flex flex-wrap">
+      <ul className="flex flex-wrap ">
         {displayedCategories.map((category) => (
           <li
-            className="flex flex-wrap justify-between items-center text-center hover:text-gray-500 border hover:border-slate-500 w-28 h-32  "
+            className="flex justify-start items-center text-center hover:text-gray-500 border hover:border-slate-500 w-28 h-34  "
             key={category._id}
           >
             <Link

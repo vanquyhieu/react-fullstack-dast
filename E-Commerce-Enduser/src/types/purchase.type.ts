@@ -6,7 +6,7 @@ export type PurchaseListStatus = purchasesStatus | 0;
 
 export interface Purchase {
     _id?: string;
-    product_Id: string;
+    product_Id: string; 
     name:string;
     price:number;
     price_before_discount:number;

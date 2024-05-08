@@ -161,6 +161,7 @@ function ProductDetailPage() {
                 </button>
               </div>
             </div>
+            {/* product detail */}
             <div className="col-span-7">
               <h1 className="text-xl font-medium uppercase">{product.name}</h1>
               <div className="mt-8 flex items-center">
@@ -178,14 +179,21 @@ function ProductDetailPage() {
                   <span className="ml-1 text-gray-500">Đã bán</span>
                 </div>
               </div>
+              {/* price */}
               <div className="mt-8 flex items-center bg-gray-50 px-5 py-4">
                 <div className="text-gray-500 line-through">
                   {formatCurrency(product.price_before_discount)}
                   &nbsp;VND
                 </div>
-                <div className="ml-3 text-3xl font-medium text-primary">{formatCurrency(product.price)}&nbsp;VND</div>
-                <div className="ml-4 rounded-sm bg-primary px-1 py-[2px] text-xs font-semibold uppercase text-white">
+                <div className="ml-3 text-3xl font-medium text-red-600">{formatCurrency(product.price)}&nbsp;VND</div>
+                <div className="ml-4 rounded-sm bg-orange px-1 py-[2px] text-xs font-semibold uppercase text-white">
                   {rateSale(product.price_before_discount, product.price)} giảm
+                </div>
+              </div>
+              <div className="mt-8 flex items-center bg-gray-50 px-5 py-4">
+                <div className="text-gray-500 line-through">
+                </div>
+                <div className="ml-4 rounded-sm bg-orange px-1 py-[2px] text-xs font-semibold uppercase text-white">
                 </div>
               </div>
               <div className="mt-8 flex items-center">
@@ -253,7 +261,6 @@ function ProductDetailPage() {
           </div> */}
         </div>
       </div>
-
       <div className="mt-6">
         <div className="container">
           <h3 className="uppercase text-gray-400">Sản phẩm tương tự</h3>

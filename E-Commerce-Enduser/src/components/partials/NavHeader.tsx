@@ -7,10 +7,7 @@ import { path } from '../../constants';
 import useAuth from '../../hooks/useAuth';
 
 function NavHeader() {
-  const { isAuthenticated, user, logout } = useAuth();
-
-  const queryClient = useQueryClient();
-
+  const { isAuthenticated, logout } = useAuth();
   return (
     <div className=" flex items-center justify-end space-x-4 py-2">
       {/* language switcher */}

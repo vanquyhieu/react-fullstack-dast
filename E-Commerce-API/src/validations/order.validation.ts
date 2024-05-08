@@ -1,26 +1,19 @@
 import Joi from "joi";
-import { IOrder, IOderDetail } from "../types/model";
+import { IPurchase } from "../types/model";
 
 
 
-const orderDetailSchema = Joi.object<IOderDetail>({
-    product: Joi.string().required(),
-    quantity: Joi.number().min(1).required(),
+const orderDetailSchema = Joi.object<IPurchase>({
+  product_Id: Joi.string().required(),
+  buy_count: Joi.number().min(1).required(),
     price: Joi.number().min(1).required(),
-    discount: Joi.number().min(0).max(90).required(),
   });
   
-  const orderSchema = Joi.object<IOrder>({
-    createdDate: Joi.date().required(),
-    shippedDate: Joi.date(),
+  const orderSchema = Joi.object<IPurchase>({
+    createdAt: Joi.date().required(),
+    updatedAt: Joi.date(),
     status: Joi.string().valid('WAINTING', 'COMPLETED', 'CANCEL').default('WAINTING').required(),
-    description: Joi.string(),
-    shippingAddress: Joi.string(),
-    shippingCity: Joi.string().required(),
-    paymentType: Joi.string().valid('CASH', 'CREDIT', 'CARD').default('CASH').required(),
-    customer: Joi.string().required(),
-    employee: Joi.string().required(),
-    orderDetail: Joi.array().items(orderDetailSchema).required(),
+    user: Joi.string().required(),
   });
 
   

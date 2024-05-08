@@ -1,15 +1,11 @@
 import { Link } from 'react-router-dom';
 import useSearchProducts from '../../hooks/useSearchProducts';
 import NavHeader from './NavHeader';
-import { useQuery } from 'react-query';
-import { purchasesStatus } from '../../constants/purchase';
-import { purchaseService } from '../../services';
 import { Popover } from '../shared';
 import noproduct from 'src/assets/images/no-product.png';
 import { formatCurrency } from '../../utils';
 import { path } from '../../constants';
 import { useCartStore } from '../../hooks/useCartStore';
-import useAuth from '../../hooks/useAuth';
 
 const MAX_PURCHASES = 5;
 
@@ -19,9 +15,9 @@ function Header() {
 
   return (
     <div className="bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-2 text-white">
-      <div className="container">
+      <div className="container flex-col">
         <NavHeader />
-        <div className="mt-4 grid grid-cols-12 items-end gap-4">
+        <div className="mt-4 grid grid-cols-12 items-center gap-4">
           <Link to="/" className="col-span-2">
             <svg viewBox="0 0 192 65" className="h-11 w-full fill-white">
               <g fillRule="evenodd">
@@ -44,7 +40,7 @@ function Header() {
               </button>
             </div>
           </form>
-          <div className="col-span-1 justify-self-end">
+          <div className="col-span-1">
             <Popover
               renderPopover={
                 <div className="relative  max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md">
@@ -53,7 +49,7 @@ function Header() {
                       <div className="capitalize text-gray-400">Sản phẩm mới thêm</div>
                       <div className="mt-5">
                         {items.slice(0, MAX_PURCHASES).map((item) => (
-                          <div className="mt-2 flex py-2 hover:bg-gray-100" key={item._id}>
+                          <div className="mt-2 flex py-2 hover:bg-gray-100" key={item.product_Id}>
                             <div className="flex-shrink-0">
                               <img src={item.images[0].url} alt={item.name} className="h-11 w-11 object-cover" />
                             </div>
@@ -84,7 +80,7 @@ function Header() {
                 </div>
               }
             >
-              <Link to="/" className="relative">
+              <Link to="/" className="relative flex justify-around">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-8 w-8">
                   <path
                     strokeLinecap="round"
@@ -93,7 +89,7 @@ function Header() {
                   />
                 </svg>
                 {items && items.length > 0 && (
-                  <span className="absolute top-[-5px] left-[17px] rounded-full bg-white px-[9px] py-[1px] text-xs text-orange ">
+                  <span className="absolute top-[-5px] rounded-full bg-white px-[9px] text-xs text-orange ">
                     {items?.length}
                   </span>
                 )}

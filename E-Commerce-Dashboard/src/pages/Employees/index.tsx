@@ -23,7 +23,6 @@ interface DataType {
   position?: string;
   department?: string;
   isActive?: boolean;
- 
 }
 
 const Employees= () => {

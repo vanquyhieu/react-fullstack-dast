@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { axiosClient } from '../library/axiosClient';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import config from '../constants/config';
-import { json } from 'stream/consumers';
 import { saveProfile } from '../utils';
 import { toast } from 'react-toastify';
 import { User } from '../types/user.type';
@@ -61,7 +60,9 @@ const useAuth = create(
           }
         } catch (error) {
           //Gọi API lỗi
+          error && toast.warn('Sai email hoặc password');
           console.log('login error', error);
+          window.location.href = '/login';
           set({ isLoading: false ,  isAuthenticated:false});
           return { isAuthenticated: false, isLoading: false, error: 'Login failed' };
         }
@@ -72,6 +73,7 @@ const useAuth = create(
         set({ user: null, isAuthenticated: false, isLoading: false  });
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('cart-storage');
         sessionStorage.removeItem('auth-storage');
       },
     }),

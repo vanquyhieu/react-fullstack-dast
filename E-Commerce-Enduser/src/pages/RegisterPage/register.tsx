@@ -109,7 +109,7 @@ function RegisterPage() {
                                 <Button
                                     primary
                                     type="submit"
-                                    className="flex w-full items-center justify-center py-4 bg-[linear-gradient(-180deg,#f53d2d,#f63)]"
+                                    className="flex w-full items-center justify-center py-4 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white"
                                     isLoading={registerMutation.isLoading}
                                 >
                                     Đăng ký

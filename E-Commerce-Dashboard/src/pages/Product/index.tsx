@@ -15,14 +15,10 @@ import {
   Popconfirm,
   Spin,
   Collapse,
-  Divider,
-  SelectProps,
 } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import { axiosClient } from "../../library/axiosClient";
 import config from "../../constants/config";
-import { AnyObject } from "antd/es/_util/type";
 import { ColumnsType } from "antd/es/table";
 import {
   CloseOutlined,
@@ -32,8 +28,8 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import UploadImages from "../../components/ImageUpload";
-import Panel from "antd/es/cascader/Panel";
 import { formatCurrency } from "../../utils";
+import TextArea from "antd/es/input/TextArea";
 
 type responseType = {
   destination: string;
@@ -42,11 +38,9 @@ type responseType = {
   path: string;
   size: number;
 };
-
 type itemType = {
   response: responseType;
 };
-
 type categoryType = {
   _id?: string;
   name: string;
@@ -72,16 +66,14 @@ interface DataType {
   supplier: supplierType;
   images: imagesType[];
 }
-type SelectWithNameProps = SelectProps & {
-  name: (string | number)[];
-  value: (string | number)[];
-};
+
 const ProductPage = () => {
-  const navigate = useNavigate();
   //message edit
   const [messageApi, contextHolder] = message.useMessage();
   //Toggle Modal Edit
   const [isModalEditOpen, setIsModalEditOpen] = React.useState(false);
+  const [isModalAddVariant, setIsModalAddVariant] = React.useState(false);
+
   //Toggle Modal Create
   const [isModalCreateOpen, setIsModalCreateOpen] = React.useState(false);
   //upload
@@ -95,13 +87,6 @@ const ProductPage = () => {
       }
     });
   }
-  // create product
-  const onFinish = async (values: DataType) => {
-    console.log("Success:", values);
-  };
-  const onFinishFailed = (errorInfo: AnyObject) => {
-    console.log("Failed:", errorInfo);
-  };
   //======= lấy sản phẩm  =====//
   const queryClient = useQueryClient();
   const { data, isLoading, isError, error } = useQuery({
@@ -187,6 +172,9 @@ const ProductPage = () => {
   const onFinishEditFailed = (errorInfo: object) => {
     console.log("Failed:", errorInfo);
   };
+    //======= Sự kiện add variant =====//
+    const [addVariantForm] = Form.useForm();
+
   //======= Sự kiện Create =====//
   const fetchCreate = async (formData: DataType) => {
     return await axiosClient.post(config.urlAPI + "/v1/products", formData);
@@ -331,21 +319,43 @@ const ProductPage = () => {
       ),
     },
     //price
-    {
-      title: "Giá",
-      dataIndex: "price",
-      key: "price",
-      render: (_text, record) => <p>{formatCurrency(record.price)}</p>,
-    },
+    // {
+    //   title: "Giá",
+    //   dataIndex: "price",
+    //   key: "price",
+    //   render: (_text, record) => <p>{formatCurrency(record.price)}</p>,
+    // },
     //stock
-    { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
+    // { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
     //discount
+    // {
+    //   title: "Giá gốc",
+    //   dataIndex: "price_before_discount",
+    //   key: "price_before_discount",
+    //   render: (_text, record) => (
+    //     <p>{formatCurrency(record.price_before_discount)}</p>
+    //   ),
+    // },
+    //attr
     {
-      title: "Giá gốc",
-      dataIndex: "price_before_discount",
-      key: "price_before_discount",
-      render: (_text, record) => (
-        <p>{formatCurrency(record.price_before_discount)}</p>
+      title: 'Kiểu loại',
+      key:"variants",
+      render: (_, record) => (
+        <Space size="middle">
+            <Button
+            type="dashed"
+            icon={<PlusOutlined />}
+            onClick={() => {
+              console.log("Thêm kiểu");
+              setIsModalAddVariant(true); //show modal edit lên
+              addVariantForm.setFieldsValue({
+                ...record,
+                supplierId: record.supplier._id,
+                categoryId: record.category._id,
+              });
+            }}
+          />
+        </Space>
       ),
     },
     //category
@@ -461,10 +471,10 @@ const ProductPage = () => {
                   { required: true, message: "Please input Category Name!" },
                 ]}
               >
-                <Input />
+                <TextArea></TextArea>
               </Form.Item>
               {/*variants*/}
-              <Form.List name="variants">
+              {/* <Form.List name="variants">
                 {(fields, { add, remove }) => (
                   <div
                     style={{
@@ -475,7 +485,7 @@ const ProductPage = () => {
                   >
                     {fields.map((field) => (
                       <Card
-                        size="default"
+                        size="small"
                         title={`Loại ${field.name + 1}`}
                         key={field.key}
                         extra={
@@ -486,7 +496,6 @@ const ProductPage = () => {
                           />
                         }
                       >
-                        {/* Nest Form.List */}
                         <Form.Item label="attributes">
                           <Form.List name={[field.name, "attributes"]}>
                             {(subFields, subOpt) => (
@@ -497,27 +506,20 @@ const ProductPage = () => {
                                 }}
                               >
                                 {subFields.map((subField) => (
-                                  <Space
-                                   key={subField.key}
-                                    
-                                  >
+                                  <Space key={subField.key}>
                                     <Form.Item
-                                      name={[subField.name,"name"]}
-                                      style={{ width: '8rem' }}
+                                      name={[subField.name, "name"]}
+                                      label="name"
+                                      style={{ width: "8rem" }}
                                     >
-                                      <Select>
-                                        <Select.Option value="Color">Color</Select.Option>
-                                        <Select.Option value="Size">Size</Select.Option>
-                                      </Select>
+                                      <Input />
                                     </Form.Item>
                                     <Form.Item
-                                      name={[subField.name,"value"]}
-                                      style={{ width: '8rem' }}
+                                      name={[subField.name, "value"]}
+                                      label="value"
+                                      style={{ width: "8rem" }}
                                     >
-                                      <Select>
-                                        <Select.Option value="Black">Black</Select.Option>
-                                        <Select.Option value="16Gb">16Gb</Select.Option>
-                                      </Select>
+                                      <Input />
                                     </Form.Item>
                                     <CloseOutlined
                                       onClick={() => {
@@ -528,10 +530,12 @@ const ProductPage = () => {
                                 ))}
                                 <Button
                                   type="dashed"
-                                  onClick={() => subOpt.add()}
+                                  onClick={() => {
+                                    subOpt.add();
+                                  }}
                                   block
                                 >
-                                  + Add Sub Item
+                                  + Add attributes Item
                                 </Button>
                               </div>
                             )}
@@ -547,22 +551,23 @@ const ProductPage = () => {
                                 }}
                               >
                                 {subFields.map((subField) => (
-                                  <Space
-                                   key={subField.key}
-                                    
-                                  >
+                                  <Space key={subField.key}>
                                     <Form.Item
-                                      name={[subField.name,"option"]}
-                                      style={{ width: '8rem' }}
+                                      name={[subField.name, "option"]}
+                                      style={{ width: "8rem" }}
                                     >
                                       <Select>
-                                        <Select.Option value="default">default</Select.Option>
-                                        <Select.Option value="sales">sales</Select.Option>
+                                        <Select.Option value="default">
+                                          default
+                                        </Select.Option>
+                                        <Select.Option value="sales">
+                                          sales
+                                        </Select.Option>
                                       </Select>
                                     </Form.Item>
                                     <Form.Item
-                                      name={[subField.name,"price"]}
-                                      style={{ width: '8rem' }}
+                                      name={[subField.name, "price"]}
+                                      style={{ width: "8rem" }}
                                     >
                                       <Input type="number"></Input>
                                     </Form.Item>
@@ -584,52 +589,24 @@ const ProductPage = () => {
                             )}
                           </Form.List>
                         </Form.Item>
+                        <Form.Item label="quantity">
+                            <Input type="number"></Input>
+                        </Form.Item>
                       </Card>
                     ))}
-
                     <Button type="dashed" onClick={() => add()} block>
                       + Loại sản phẩm
                     </Button>
                   </div>
                 )}
-              </Form.List>
-              {/* Giá */}
-              <Form.Item<DataType>
-                label="Giá hiện tại"
-                name="price"
-                rules={[
-                  { required: true, message: "Please input Category Name!" },
-                ]}
-              >
-                <Input type="number" />
-              </Form.Item>
-              {/*Giảm giá %*/}
-              <Form.Item<DataType>
-                label="Giá gốc"
-                name="price_before_discount"
-                rules={[
-                  { required: true, message: "Please input Category Name!" },
-                ]}
-              >
-                <Input type="number" />
-              </Form.Item>
-              {/* Số lượng hiện có */}
-              <Form.Item<DataType>
-                label="Số lượng"
-                name="quantity"
-                rules={[
-                  { required: true, message: "Please input Category Name!" },
-                ]}
-              >
-                <Input type="number" />
-              </Form.Item>
+              </Form.List> */}
               {/* Mô tả chi tiết */}
               <Form.Item<DataType>
-                label="Mô tả chi tiết"
+                label="Mô tả"
                 name="description"
                 rules={[{ required: false }]}
               >
-                <Input />
+                <TextArea></TextArea>
               </Form.Item>
               {/* Tên danh mục */}
               <Form.Item<DataType>

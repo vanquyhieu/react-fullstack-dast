@@ -38,7 +38,7 @@ const HomePage = () => {
     <div className="container pb-4 ml-10">
       {productsData && (
         <div className="flex-grow items-center gap-3 my-3 ">
-          <div className="section-banner-hotword--no-skin flex gap-3">
+          <div className="section-banner-hotword--no-skin flex gap-5">
             <Carousel slides={slides}></Carousel>
             <div className="flex-col w-[30%] ">
               <div className="overflow-hidden">
